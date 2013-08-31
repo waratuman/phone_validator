@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.1'
   spec.authors       = ['James R. Bracy']
   spec.email         = ['waratuman@gmail.com']
-  spec.description   = %q{Rails plugin for phone validation}
-  spec.summary       = %q{Simple phone validation for Rails}
+  spec.description   = %q{Rails plugin for validating NANP phone numbers}
+  spec.summary       = %q{Simple NANP phone validation for Rails}
   spec.homepage      = 'http://github.com/waratuman/phone_validator'
   spec.license       = 'MIT'
 
