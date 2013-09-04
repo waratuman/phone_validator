@@ -8,6 +8,14 @@ class Account
   validates :phone, :phone => true
 end
 
+class Company
+  include ActiveModel::Model
+
+  attr_accessor :phone
+
+  validates :phone, :phone => { :extension => false }
+end
+
 class PhoneValidatorTest < MiniTest::Unit::TestCase
 
   test 'validates phone number' do
@@ -46,6 +54,45 @@ class PhoneValidatorTest < MiniTest::Unit::TestCase
     numbers.each do |phone|
       account.phone = phone
       assert account.valid?
+    end
+  end
+
+  test 'extension option' do
+    company = Company.new
+
+    numbers = (<<-EOF).split("\n").map(&:strip)
+      2342355678
+      234-235-5678
+      (234)235-5678
+      234.235.5678
+      +12342351234
+      +1 234-235-1234
+      1.234.235.1234
+      12342351234
+      1-234-235-1234
+      1.234.235.1234
+    EOF
+    
+    ext_numbers = (<<-EOF).split("\n").map(&:strip)
+      (234)-235-1234 x. 453
+      (234)-235-2354 ex. 12345
+      (234)-235-1234 ext. 453
+      (234)-235-1234 extension 453
+      +1 (234)-235-1234 x. 453
+      +1 (234)-235-1234 ex. 12345
+      +1 (234)-235-1234 ext. 453
+      +1 (234)-235-1234 extension 453
+    EOF
+
+    numbers.each do |phone|
+      company.phone = phone
+      assert company.valid?
+    end
+
+    ext_numbers.each do |phone|
+      company.phone = phone
+      assert !company.valid?
+      assert company.errors[:phone]
     end
   end
 
