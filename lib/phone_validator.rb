@@ -12,5 +12,16 @@ class PhoneValidator < ActiveModel::EachValidator
     end
     
   end
+  
+  def self.format_phone(number)
+    return if !number || number.empty?
+    number = number.gsub(/[^\d]/, '')
+    number = '1' + number if number[0] != '1'
+    number = '+' + number
+    if !number[12..-1].to_s.empty?
+      number = number[0..11] + 'x' + number[12..-1]
+    end
+    number
+  end
 
 end
