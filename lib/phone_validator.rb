@@ -6,7 +6,7 @@ class PhoneValidator < ActiveModel::EachValidator
     return if !value
     test_value = value
 
-    if options[:extension] != false
+    if options[:extension]
       test_value.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '')
     end
 
