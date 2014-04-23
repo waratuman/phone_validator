@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'active_model'
+require 'minitest'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'phone_validator'

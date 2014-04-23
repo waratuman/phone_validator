@@ -1,27 +1,41 @@
+require 'phony'
+
 class PhoneValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     return if !value
+    test_value = value
 
-    source = '\A((\+? ?1)([- \.]?))?((\( ?([2-9][0-8]\d) ?\))|([2-9][0-8]\d))([- \.]?)?([2-9]((0\d)|(1[02-9])|([2-9]\d)))([- \.]?)?(\d{4})'
-    source = source + '( ?(x\.?| |\.|(ext\.?)|extension|ex\.?) ?(\d+))?' if options[:extension] != false
-    source = source + '\z'
+    if options[:extension] != false
+      test_value.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '')
+    end
 
-    unless value.strip =~ Regexp.compile(source, Regexp::IGNORECASE)
+    test_value = "+1#{test_value}" if !Phony.plausible?(test_value)
+
+    if !Phony.plausible?(test_value)
       record.errors.add(attribute, options[:message] || :invalid)
     end
-    
   end
   
-  def self.format_phone(number)
+  def self.normalize(number, options={})
     return if !number || number.empty?
-    number = number.gsub(/[^\d]/, '')
-    number = '1' + number if number[0] != '1'
-    number = '+' + number
-    if !number[12..-1].to_s.empty?
-      number = number[0..11] + 'x' + number[12..-1]
+
+    extension = nil
+    if options[:extension]
+      number =~ /( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/
+      extension = $4
+      number = number.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '')
     end
-    number
+
+    number = "+1" + number if !Phony.plausible?(number)
+
+    return if !Phony.plausible?(number)
+
+    if options[:extension] && extension
+      Phony.normalize(number) + 'x' + extension
+    else
+      Phony.normalize(number)
+    end
   end
 
 end
