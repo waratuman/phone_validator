@@ -7,7 +7,7 @@ class PhoneValidator < ActiveModel::EachValidator
     test_value = value
 
     if options[:extension]
-      test_value.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '')
+      test_value = test_value.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '')
     end
 
     test_value = "+1#{test_value}" if !Phony.plausible?(test_value)
