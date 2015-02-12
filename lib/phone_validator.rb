@@ -22,9 +22,9 @@ class PhoneValidator < ActiveModel::EachValidator
 
     extension = nil
 
-    number =~ /( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/
+    number =~ /( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/i
     extension = $4
-    number = number.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/, '').gsub(/[^\d\+]/, '')
+    number = number.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/i, '').gsub(/[^\d\+]/, '')
 
     number = "+1" + number if number[0] != '+' && number.length == 10
 
