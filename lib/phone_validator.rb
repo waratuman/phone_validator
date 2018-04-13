@@ -27,7 +27,10 @@ class PhoneValidator < ActiveModel::EachValidator
     number = number.gsub(/( ?(x\.?|(ext\.?)|extension|ex\.?) ?(\d+))/i, '').gsub(/[^\d\+]/, '')
 
     number = "+1" + number if number[0] != '+' && number.length == 10
-
+    
+    # UK local formatting often places leading 0 in region/area code '01252' => '1252'
+    number.gsub!(/^\+44\D?0/, '+44') 
+    
     return if !Phony.plausible?(number)
 
     if options[:extension] != false && extension
