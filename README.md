@@ -14,17 +14,15 @@ Requires Ruby 3.3+ and ActiveModel 7.1+.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+This gem is not on RubyGems. The `phone_validator` gem there is a different
+project. Install it from GitHub by adding this line to your application's
+Gemfile:
 
-    gem 'phone_validator'
+    gem 'phone_validator', github: 'waratuman/phone_validator', tag: 'v1.0.0'
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install phone_validator
 
 phonelib ships a validator named `PhoneValidator` too. This gem replaces it,
 so `validates :phone, phone: ...` always uses the options described below.
